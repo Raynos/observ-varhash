@@ -3,8 +3,6 @@ var extend = require('xtend')
 
 var NO_TRANSACTION = {}
 
-ObservVarhash.Tombstone = new Tombstone()
-
 module.exports = ObservVarhash
 
 function ObservVarhash (hash, createValue) {
@@ -59,6 +57,10 @@ function get (key) {
 
 function put (createValue, key, val) {
   checkKey(key)
+  
+  if (val === undefined) {
+    throw new Error('cannot varhash.put(key, undefined).')
+  }
 
   var observ = typeof observ === 'function' ?
     createValue(val, key) : val
@@ -91,7 +93,7 @@ function del (key) {
   delete state[key]
   delete this[key]
 
-  setNonEnumerable(state, '_diff', diff(key, ObservVarhash.Tombstone))
+  setNonEnumerable(state, '_diff', diff(key, undefined))
   this.set(state)
 
   return this
@@ -144,17 +146,4 @@ function checkKey (key) {
   throw new Error(
     'cannot create an observ-varhash with key `' + key + '`. ' + blacklist[key]
   )
-}
-
-// identify deletes
-function Tombstone () {
-  
-}
-
-Tombstone.prototype.toJSON = nameTombstone
-Tombstone.prototype.inspect = nameTombstone
-Tombstone.prototype.toString = nameTombstone
-
-function nameTombstone () {
-  return '[object Tombstone]'
 }
