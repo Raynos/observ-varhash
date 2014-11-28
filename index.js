@@ -12,7 +12,7 @@ function ObservVarhash (hash, createValue) {
   var currentTransaction = NO_TRANSACTION
 
   var obs = Observ()
-  obs._removeListeners = {}
+  setNonEnumerable(obs, '_removeListeners', {});
   var key
 
   for (key in hash) {
@@ -35,9 +35,9 @@ function ObservVarhash (hash, createValue) {
   currentTransaction = NO_TRANSACTION
 
 
-  obs.get = get.bind(obs)
-  obs.put = put.bind(obs, createValue)
-  obs.delete = del.bind(obs)
+  setNonEnumerable(obs, 'get', get.bind(obs))
+  setNonEnumerable(obs, 'put', put.bind(obs, createValue))
+  setNonEnumerable(obs, 'delete', del.bind(obs))
 
 
   obs(function (newState) {
