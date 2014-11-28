@@ -35,6 +35,7 @@ function ObservVarhash (hash, createValue) {
   currentTransaction = NO_TRANSACTION
 
 
+  setNonEnumerable(obs, 'set', obs.set)
   setNonEnumerable(obs, 'get', get.bind(obs))
   setNonEnumerable(obs, 'put', put.bind(obs, createValue))
   setNonEnumerable(obs, 'delete', del.bind(obs))
