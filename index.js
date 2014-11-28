@@ -77,8 +77,8 @@ function put (createValue, key, val) {
 
   setNonEnumerable(state, '_diff', diff(key, state[key]))
 
-  this.set(state)
   this[key] = observ
+  this.set(state)
 
   return this
 }
